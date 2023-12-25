@@ -1,0 +1,21 @@
+eve:
+  url: https://esi.evetech.net
+
+spring:
+  graphql:
+    graphiql:
+      introspection: true
+      enabled: true
+    cors:
+      allowed-origins: '*'
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+server:
+  port: 8080
+
