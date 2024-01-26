@@ -15,4 +15,5 @@ type GroupDetails {
     marketGroupId: Int,
     name: String,
     marketItemList: [MarketItem],
+    childGroupDetails: [GroupDetails]
 }

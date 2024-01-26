@@ -32,25 +32,36 @@ public class MarketService {
     }
 
     public MarketGroups getMarketStructure() {
-        mongoService.readMarketGroups();
+        return sortMarketItems();
+    }
+
+    private MarketGroups sortMarketItems() {
         List<Integer> marketGroupsId = getMarket();
+        Map<Integer, GroupDetails> mappedGroups = new HashMap<>();
+        for (int id : marketGroupsId) {
+            GroupDetails groupDetails = getGroupDetailsResponse(getItemById(id));
+            mappedGroups.put(groupDetails.getMarketGroupId(), groupDetails);
+        }
+        for(GroupDetails groupDetails: mappedGroups.values()){
+            Integer parentGroupId = groupDetails.getParentGroupId();
+            if(parentGroupId != null){
+                mappedGroups.get(parentGroupId).getChildGroupDetailsList().add(groupDetails);
+            }
+        }
         MarketGroups marketGroups = new MarketGroups();
-        for (int id: marketGroupsId) {
-            marketGroups.getItems().add(getGroupDetails(getItemById(id)));
+        for(GroupDetails groupDetails: mappedGroups.values()){
+            if(groupDetails.getParentGroupId() == null) {
+                marketGroups.getItems().add(groupDetails);
+            }
         }
         return marketGroups;
     }
 
-    private GroupDetails getGroupDetails(GroupDetailsResponse groupDetailsResponse) {
-        List<Integer> types = groupDetailsResponse.getTypes();
+    private GroupDetails getGroupDetailsResponse(GroupDetailsResponse resp) {
         List<MarketItem> marketItemList = new ArrayList<>();
-        if (types != null) {
-            types.forEach(type -> marketItemList.add(getItemType(type)));
+        for (int id : resp.getTypes()) {
+            marketItemList.add(getItemType(id));
         }
-        return new GroupDetails(groupDetailsResponse.getDescription(),
-                groupDetailsResponse.getParentGroupId(),
-                groupDetailsResponse.getMarketGroupId(),
-                groupDetailsResponse.getName(),
-                marketItemList);
+        return new GroupDetails(resp.getDescription(), resp.getParentGroupId(), resp.getMarketGroupId(), resp.getName(), marketItemList);
     }
 }
