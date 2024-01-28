@@ -19,6 +19,6 @@ public class EveMongoClient {
     private MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
 
     public MongoDatabase getMarketGroupsCollection() {
-        return mongoClient.getDatabase("MarketGroups");
+        return mongoClient.getDatabase("EveMarket");
     }
 }

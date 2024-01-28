@@ -31,36 +31,50 @@ public class MarketService {
         return eveClient.getItemType(type);
     }
 
-    public MarketGroups getMarketStructure() {
+    public String getMarketStructure() {
         return sortMarketItems();
     }
 
-    private MarketGroups sortMarketItems() {
+    private String sortMarketItems() {
+        MarketGroups marketGroupsDB = mongoService.readMarketGroups();
         List<Integer> marketGroupsId = getMarket();
-        Map<Integer, GroupDetails> mappedGroups = new HashMap<>();
-        for (int id : marketGroupsId) {
-            GroupDetails groupDetails = getGroupDetailsResponse(getItemById(id));
-            mappedGroups.put(groupDetails.getMarketGroupId(), groupDetails);
-        }
-        for(GroupDetails groupDetails: mappedGroups.values()){
-            Integer parentGroupId = groupDetails.getParentGroupId();
-            if(parentGroupId != null){
-                mappedGroups.get(parentGroupId).getChildGroupDetailsList().add(groupDetails);
+
+        if(false){
+            Map<Integer, GroupDetails> mappedGroups = new HashMap<>();
+            for (int id : marketGroupsId) {
+                GroupDetails groupDetails = getGroupDetailsResponse(getItemById(id));
+                mappedGroups.put(groupDetails.getMarketGroupId(), groupDetails);
             }
-        }
-        MarketGroups marketGroups = new MarketGroups();
-        for(GroupDetails groupDetails: mappedGroups.values()){
-            if(groupDetails.getParentGroupId() == null) {
-                marketGroups.getItems().add(groupDetails);
+            for(GroupDetails groupDetails: mappedGroups.values()){
+                Integer parentGroupId = groupDetails.getParentGroupId();
+                if(parentGroupId != null){
+                    mappedGroups.get(parentGroupId).getChildGroupDetailsList().add(groupDetails);
+                }
             }
+            MarketGroups marketGroups = new MarketGroups();
+            for(GroupDetails groupDetails: mappedGroups.values()){
+                if(groupDetails.getParentGroupId() == null) {
+                    marketGroups.getItems().add(groupDetails);
+                }
+            }
+         //   mongoService.deleteMarketGroups(marketGroupsDB);
+//            mongoService.writeMarketGroups(marketGroups);
         }
-        return marketGroups;
+
+       // return marketGroupsDB.toString();
+        return marketGroupsDB.toString();
+    }
+
+    private boolean ifUpdated(MarketGroups marketGroupsDB, List<Integer> marketIds){
+        return marketGroupsDB.getItems().size() != marketIds.size();
     }
 
     private GroupDetails getGroupDetailsResponse(GroupDetailsResponse resp) {
         List<MarketItem> marketItemList = new ArrayList<>();
-        for (int id : resp.getTypes()) {
-            marketItemList.add(getItemType(id));
+        if(!resp.getTypes().isEmpty()) {
+            for (int id : resp.getTypes()) {
+                marketItemList.add(getItemType(id));
+            }
         }
         return new GroupDetails(resp.getDescription(), resp.getParentGroupId(), resp.getMarketGroupId(), resp.getName(), marketItemList);
     }

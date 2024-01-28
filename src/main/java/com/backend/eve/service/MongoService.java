@@ -31,16 +31,22 @@ public class MongoService {
 
 
     public MarketGroups readMarketGroups(){
-        MongoDatabase db =mongoClient.getMarketGroupsCollection().withCodecRegistry(pojoCodecRegistry);
+        MongoDatabase db;
+           db =mongoClient.getMarketGroupsCollection().withCodecRegistry(pojoCodecRegistry);
         List<MarketGroups> marketGroups = new ArrayList<>();
-        MongoCollection<MarketGroups> collection = db.getCollection("MarketGroups", MarketGroups.class);
+        MongoCollection<MarketGroups> collection = db.getCollection("MarketStructure", MarketGroups.class);
         collection.find().into(marketGroups);
         return marketGroups.getFirst();
     }
 
     public void writeMarketGroups(MarketGroups marketGroups){
         MongoDatabase db =mongoClient.getMarketGroupsCollection().withCodecRegistry(pojoCodecRegistry);
-        MongoCollection<MarketGroups> collection = db.getCollection("MarketGroups", MarketGroups.class);
+        MongoCollection<MarketGroups> collection = db.getCollection("MarketStructure", MarketGroups.class);
         collection.insertOne(marketGroups);
+    }
+
+    public void deleteMarketGroups(MarketGroups marketGroups){
+        MongoDatabase db =mongoClient.getMarketGroupsCollection().withCodecRegistry(pojoCodecRegistry);
+        MongoCollection<MarketGroups> collection = db.getCollection("MarketStructure", MarketGroups.class);
     }
 }

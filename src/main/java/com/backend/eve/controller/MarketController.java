@@ -15,7 +15,7 @@ public class MarketController {
     }
 
     @QueryMapping
-    public MarketGroups getMarketDetails() {
+    public String getMarketDetails() {
         return marketService.getMarketStructure();
     }
 
