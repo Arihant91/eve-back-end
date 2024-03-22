@@ -1,10 +1,10 @@
 package com.backend.eve.service;
 
 import com.backend.eve.client.EveMongoClient;
-import com.backend.eve.model.MarketGroups;
+import com.backend.eve.model.GroupDetails;
+import com.backend.eve.model.MarketItem;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import lombok.AllArgsConstructor;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -26,27 +26,19 @@ public class MongoService {
     public MongoService(EveMongoClient mongoClient) {
         this.mongoClient = mongoClient;
         pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
-        pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
+        pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(PojoCodecProvider.builder().register(GroupDetails.class, MarketItem.class).build()));
+
     }
 
 
-    public MarketGroups readMarketGroups(){
-        MongoDatabase db;
-           db =mongoClient.getMarketGroupsCollection().withCodecRegistry(pojoCodecRegistry);
-        List<MarketGroups> marketGroups = new ArrayList<>();
-        MongoCollection<MarketGroups> collection = db.getCollection("MarketStructure", MarketGroups.class);
-        collection.find().into(marketGroups);
-        return marketGroups.getFirst();
+    public List<GroupDetails> getMarketGroups(){
+        MongoDatabase db = mongoClient.getMarketGroupsCollection().withCodecRegistry(pojoCodecRegistry);
+        List<GroupDetails> groupDetailsList = new ArrayList<>();
+        MongoCollection<GroupDetails> collection = db.getCollection("MarketStructure", GroupDetails.class);
+
+        collection.find().into(groupDetailsList);
+        return groupDetailsList;
     }
 
-    public void writeMarketGroups(MarketGroups marketGroups){
-        MongoDatabase db =mongoClient.getMarketGroupsCollection().withCodecRegistry(pojoCodecRegistry);
-        MongoCollection<MarketGroups> collection = db.getCollection("MarketStructure", MarketGroups.class);
-        collection.insertOne(marketGroups);
-    }
 
-    public void deleteMarketGroups(MarketGroups marketGroups){
-        MongoDatabase db =mongoClient.getMarketGroupsCollection().withCodecRegistry(pojoCodecRegistry);
-        MongoCollection<MarketGroups> collection = db.getCollection("MarketStructure", MarketGroups.class);
-    }
 }

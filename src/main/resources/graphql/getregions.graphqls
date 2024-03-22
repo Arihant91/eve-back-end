@@ -1,0 +1,8 @@
+extend type Query { getRegions: [Entity]
+}
+
+type Entity {
+    category: String!,
+    id: Int,
+    name: String!
+}

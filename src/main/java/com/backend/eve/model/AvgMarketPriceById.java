@@ -9,7 +9,7 @@ public class AvgMarketPriceById {
 
     @JsonAlias("adjusted_price")
     private Long adjustedPrice;
-    @JsonAlias("avarega_price")
-    private Long avaragePrice;
+    @JsonAlias("average_price")
+    private Long averagePrice;
     private int typeId;
 }

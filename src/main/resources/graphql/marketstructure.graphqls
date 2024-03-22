@@ -1,19 +1,20 @@
 extend type Query { getMarketDetails: String!
 }
 
-#type MarketGroups {
-#    items: [GroupDetails]
-#}
-#
-#type MarketItem {
-#    name: String
-#}
-#
-#type GroupDetails {
-#    description : String,
-#    parentGroupId: Int,
-#    marketGroupId: Int,
-#    name: String,
-#    marketItemList: [MarketItem],
-#    childGroupDetails: [GroupDetails]
-#}
+type MarketItem {
+    name: String,
+    description: String,
+    capacity: Float,
+    groupId: Int,
+    marketGroupId: Int
+}
+
+type GroupDetails {
+    description : String,
+    parentGroupId: Int,
+    marketGroupId: Int,
+    name: String,
+    marketItems: [MarketItem],
+    childGroups: [GroupDetails]
+}
+

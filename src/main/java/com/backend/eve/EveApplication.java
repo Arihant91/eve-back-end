@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @EnableFeignClients
 @SpringBootApplication
+
 public class EveApplication {
 
 	public static void main(String[] args) {
