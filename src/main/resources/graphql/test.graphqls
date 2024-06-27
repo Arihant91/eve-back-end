@@ -1,0 +1,2 @@
+extend type Query { getTest(regionId: Int, typeId: Int ): String
+}
