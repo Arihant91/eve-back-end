@@ -1,0 +1,13 @@
+extend type Query {
+    getAllItems: [sortedByCharHash]
+}
+
+type sortedByCharHash {
+    key: String
+    items: [Item]
+}
+
+type Item {
+    name: String
+    id: Int
+}

@@ -1,0 +1,13 @@
+extend type Query {
+    getStructuresByRegion(regionId: Long): structuresByRegion
+}
+
+type structuresByRegion{
+    regionId: Long,
+    structures: [Structures]
+}
+
+type Structures {
+    id: Int,
+    name: String
+}

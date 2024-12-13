@@ -2,9 +2,21 @@
 version: '3.1'
 
 services:
-
   mongo:
     image: mongo
     restart: always
     ports:
-      - 27017:27017
+      - "27017:27017"
+
+  eve-backend:
+    image: eve-backend
+    container_name: eve-backend
+    ports:
+      - "8080:8080"
+      - "8060:8060"
+    networks:
+      - eve-network
+
+networks:
+  eve-network:
+    driver: bridge

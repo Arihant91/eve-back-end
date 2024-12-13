@@ -1,0 +1,19 @@
+extend type Query { getOrdersStatsByLocation(locationId: [Long], typeId: [Long],startDate: String, endDate: String, isBuyOrder: Boolean): [getOrdersStatsByLocation]
+
+}
+
+type getOrdersStatsByLocation {
+    locationId: Long,
+    typeId: Long,
+    timeOfScraping: String,
+    isBuyOrders: Boolean,
+    avgPrice: Float,
+    volumeRemain: Int,
+    highestPrice: Float,
+    lowestPrice: Float,
+    orderCount: Int,
+    medianPrice: Float,
+    stdDeviation: Float
+}
+
+scalar Long

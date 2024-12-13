@@ -12,19 +12,18 @@ import java.time.LocalDateTime;
 
 @Builder
 @Getter
-@Table("orders_mean")
-public class OrdersMeanEntity {
+@Table("orders_stats_by_location")
+public class OrdersStatsByLocationEntity {
 
-    @PrimaryKeyColumn(name = "region_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(name =  "location_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+    private Long locationId;
+    @Column("region_id")
     private Long regionId;
 
-    @PrimaryKeyColumn(name = "location_id", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
-    private Long locationId;
-
-    @PrimaryKeyColumn(name = "type_id", ordinal = 2, type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(name = "type_id", ordinal = 1, type = PrimaryKeyType.CLUSTERED)
     private Long typeId;
 
-    @PrimaryKeyColumn(name = "time_of_scraping", ordinal = 3, type = PrimaryKeyType.CLUSTERED)
+    @PrimaryKeyColumn(name = "time_of_scraping", ordinal = 2, type = PrimaryKeyType.CLUSTERED)
     private LocalDateTime timeOfScraping;
 
     @Column("is_buy_orders")
@@ -32,6 +31,9 @@ public class OrdersMeanEntity {
 
     @Column("avg_price")
     private BigDecimal avgPrice;
+
+    @Column("median_price")
+    private BigDecimal medianPrice;
 
     @Column("volume_remain")
     private Long volumeRemain;
@@ -44,4 +46,7 @@ public class OrdersMeanEntity {
 
     @Column("order_count")
     private Integer orderCount;
+
+    @Column("std_deviation")
+    private BigDecimal stdDeviation;
 }
